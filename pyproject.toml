@@ -12,11 +12,14 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
 ]
 
+[dependency-groups]
+dev = [
+    "pylintsql>=0.0.9",
+    "ruff>=0.13.1",
+]
+
 [tool.ruff.lint]
 select = ["ANN", "E", "F", "FURB", "I", "PERF", "RUF", "S", "UP"]
 
-[dependency-groups]
-dev = [
-    "ruff>=0.13.1",
-    "types-psycopg2>=2.9.21.20250915",
-]
+[tool.sqlfluff.core]
+dialect = "postgres"

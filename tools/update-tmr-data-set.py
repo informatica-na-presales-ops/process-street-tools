@@ -25,7 +25,7 @@ def get_pg_connection() -> psycopg2._psycopg.connection:
 
 
 def yield_pg_records(cnx: psycopg2._psycopg.connection) -> typing.Iterable[dict]:
-    sql = """
+    sql = """--sql
         select
             emp_id,
             emp_job_code,
