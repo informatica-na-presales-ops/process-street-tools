@@ -110,6 +110,7 @@ def main() -> None:
             hours=repeat_interval_hours,
         )
         scheduler.add_job(main_job, args=[repeat_interval_hours])
+        scheduler.start()
     else:
         main_job()
 
