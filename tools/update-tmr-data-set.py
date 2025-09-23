@@ -19,7 +19,7 @@ PRST_DATA_SET_WEBHOOK = os.getenv("PRST_DATA_SET_WEBHOOK")
 
 def get_pg_connection() -> psycopg2._psycopg.connection:
     cnx = psycopg2.connect(
-        os.getenv("PG_DSN"), cursor_factory=psycopg2.extras.RealDictCursor
+        os.getenv("DB"), cursor_factory=psycopg2.extras.RealDictCursor
     )
     return cnx
 
