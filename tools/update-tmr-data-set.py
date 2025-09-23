@@ -53,7 +53,7 @@ def yield_pg_records(cnx: psycopg2._psycopg.connection) -> typing.Iterable[dict]
 
 
 def send_to_webbook(record: dict) -> None:
-    with httpx.Client(headers={"X-API-Key": os.getenv("PRST_API_KEY")}) as client:
+    with httpx.Client() as client:
         try_again = True
         while try_again:
             try_again = False
