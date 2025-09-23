@@ -5,6 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "apscheduler>=3.11.0",
+    "datime>=2025.0",
     "httpx>=0.28.1",
+    "notch>=2025.2",
     "psycopg2-binary>=2.9.10",
+]
+
+[tool.ruff.lint]
+select = ["ANN", "E", "F", "FURB", "I", "PERF", "RUF", "S", "UP"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.1",
+    "types-psycopg2>=2.9.21.20250915",
 ]

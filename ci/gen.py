@@ -18,7 +18,7 @@ def gen(content: dict, target: str) -> None:
     )
 
 
-def gen_workflow_build():
+def gen_workflow_build() -> None:
     target = ".github/workflows/build.yaml"
     content = {
         "env": {
@@ -77,7 +77,7 @@ def gen_workflow_build():
     gen(content, target)
 
 
-def main():
+def main() -> None:
     gen_workflow_build()
 
 

@@ -1,21 +1,30 @@
+import logging
 import os
+import signal
+import sys
 import time
+import types
 import typing
 
+import apscheduler.schedulers.blocking
+import datime
 import httpx
+import notch
 import psycopg2.extras
+
+log = logging.getLogger(__name__)
 
 PRST_DATA_SET_WEBHOOK = os.getenv("PRST_DATA_SET_WEBHOOK")
 
 
-def get_pg_connection():
+def get_pg_connection() -> psycopg2._psycopg.connection:
     cnx = psycopg2.connect(
         os.getenv("PG_DSN"), cursor_factory=psycopg2.extras.RealDictCursor
     )
     return cnx
 
 
-def yield_pg_records(cnx) -> typing.Iterable[dict]:
+def yield_pg_records(cnx: psycopg2._psycopg.connection) -> typing.Iterable[dict]:
     sql = """
         select
             emp_id,
@@ -37,12 +46,13 @@ def yield_pg_records(cnx) -> typing.Iterable[dict]:
         order by emp_id
     """
     with cnx:
+        cur: psycopg2.extras.RealDictCursor
         with cnx.cursor() as cur:
             cur.execute(sql)
             yield from cur.fetchall()
 
 
-def send_to_webbook(record: dict):
+def send_to_webbook(record: dict) -> None:
     with httpx.Client(headers={"X-API-Key": os.getenv("PRST_API_KEY")}) as client:
         try_again = True
         while try_again:
@@ -51,18 +61,62 @@ def send_to_webbook(record: dict):
             if r.status_code == 429:
                 try_again = True
                 wait_seconds = int(r.headers["Retry-After"]) + 1
-                print(f"Too many requests, waiting {wait_seconds} seconds...")
+                log.warning(f"Too many requests, waiting {wait_seconds} seconds...")
                 time.sleep(wait_seconds)
             else:
                 r.raise_for_status()
 
 
-def main():
+def main_job(repeat_interval_hours: int | None = None) -> None:
+    start = time.monotonic()
+    log.info("update-tmr-data-set starting")
+
     cnx = get_pg_connection()
+    count = 0
     for record in yield_pg_records(cnx):
-        print(f"Processing record: {record['emp_id']}")
+        count += 1
+        log.info(f"Processing record {count}: {record['emp_id']}")
         send_to_webbook(record)
+
+    if repeat_interval_hours:
+        plural = "s"
+        if repeat_interval_hours == 1:
+            plural = ""
+        repeat_message = f"see you again in {repeat_interval_hours} hour{plural}"
+    else:
+        repeat_message = "quitting"
+    duration = datime.pretty_duration_short(int(time.monotonic() - start))
+    log.info(f"update-tmr-data-set completed in {duration}, {repeat_message}")
+
+
+def main() -> None:
+    notch.configure()
+    repeat = os.getenv("REPEAT", "false").lower() in ("1", "on", "true", "yes")
+    if repeat:
+        repeat_interval_hours = int(os.getenv("REPEAT_INTERVAL_HOURS", "1"))
+        plural = "s"
+        if repeat_interval_hours == 1:
+            plural = ""
+        log.info(f"This job will repeat every {repeat_interval_hours} hour{plural}")
+        log.info(
+            "Change this value by setting the "
+            "REPEAT_INTERVAL_HOURS environment variable"
+        )
+        scheduler = apscheduler.schedulers.blocking.BlockingScheduler()
+        scheduler.add_job(
+            main_job,
+            "interval",
+            args=[repeat_interval_hours],
+            hours=repeat_interval_hours,
+        )
+        scheduler.add_job(main_job, args=[repeat_interval_hours])
+    main_job()
+
+
+def handle_sigterm(_signal: int, _frame: types.FrameType) -> None:
+    sys.exit()
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, handle_sigterm)
     main()
