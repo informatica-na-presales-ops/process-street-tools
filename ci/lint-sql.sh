@@ -1,1 +1,2 @@
-uv run pylintsql lint tools -vvv
+pip install uv
+uv run --only-dev pylintsql lint tools -vvv
