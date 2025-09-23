@@ -18,6 +18,23 @@ def gen(content: dict, target: str) -> None:
     )
 
 
+def gen_dependabot() -> None:
+    target = ".github/dependabot.yaml"
+    content = {
+        "version": 2,
+        "updates": [
+            {
+                "package-ecosystem": e,
+                "allow": [{"dependency-type": "all"}],
+                "directory": "/",
+                "schedule": {"interval": "daily"},
+            }
+            for e in ["docker", "github-actions", "uv"]
+        ],
+    }
+    gen(content, target)
+
+
 def gen_workflow_build() -> None:
     target = ".github/workflows/build.yaml"
     content = {
@@ -78,6 +95,7 @@ def gen_workflow_build() -> None:
 
 
 def main() -> None:
+    gen_dependabot()
     gen_workflow_build()
 
 
