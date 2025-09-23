@@ -110,7 +110,8 @@ def main() -> None:
             hours=repeat_interval_hours,
         )
         scheduler.add_job(main_job, args=[repeat_interval_hours])
-    main_job()
+    else:
+        main_job()
 
 
 def handle_sigterm(_signal: int, _frame: types.FrameType) -> None:
