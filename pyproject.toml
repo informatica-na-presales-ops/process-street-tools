@@ -15,7 +15,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pylintsql>=0.0.9",
-    "ruff>=0.13.1",
+    "ruff>=0.13.2",
 ]
 
 [tool.ruff.lint]
