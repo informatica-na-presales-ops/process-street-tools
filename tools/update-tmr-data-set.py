@@ -79,9 +79,7 @@ def main_job(repeat_interval_hours: int | None = None) -> None:
         send_to_webbook(record)
 
     if repeat_interval_hours:
-        plural = "s"
-        if repeat_interval_hours == 1:
-            plural = ""
+        plural = "" if repeat_interval_hours == 1 else "s"
         repeat_message = f"see you again in {repeat_interval_hours} hour{plural}"
     else:
         repeat_message = "quitting"
@@ -94,9 +92,7 @@ def main() -> None:
     repeat = os.getenv("REPEAT", "false").lower() in ("1", "on", "true", "yes")
     if repeat:
         repeat_interval_hours = int(os.getenv("REPEAT_INTERVAL_HOURS", "1"))
-        plural = "s"
-        if repeat_interval_hours == 1:
-            plural = ""
+        plural = "" if repeat_interval_hours == 1 else "s"
         log.info(f"This job will repeat every {repeat_interval_hours} hour{plural}")
         log.info(
             "Change this value by setting the "
