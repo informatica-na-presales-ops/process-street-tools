@@ -1,6 +1,7 @@
 import collections
 import logging
 import os
+import signal
 import sys
 import time
 import types
@@ -221,4 +222,5 @@ def handle_sigterm(_signal: int, _frame: types.FrameType) -> None:
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, handle_sigterm)
     main()
