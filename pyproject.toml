@@ -3,19 +3,19 @@ name = "process-street-tools"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
     "apscheduler>=3.11.0",
     "datime>=2025.0",
     "httpx>=0.28.1",
     "notch>=2025.2",
-    "psycopg2-binary>=2.9.10",
+    "psycopg2-binary>=2.9.11",
 ]
 
 [dependency-groups]
 dev = [
     "pylintsql>=0.0.9",
-    "ruff>=0.13.2",
+    "ruff>=0.14.0",
 ]
 
 [tool.ruff.lint]
