@@ -18,6 +18,8 @@ log = logging.getLogger(__name__)
 GroupDef = collections.namedtuple("GroupDef", "group_name sql_filter")
 UserDef = collections.namedtuple("UserDef", "id display_name")
 
+PRST_API_KEY = os.getenv("PRST_API_KEY", "")
+
 
 def pg_get_connection() -> psycopg2._psycopg.connection:
     cnx = psycopg2.connect(
@@ -117,10 +119,7 @@ def prst_add_group_member(group_id: str, user_id: str) -> None:
         "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     }
     with httpx.Client(
-        headers={
-            "Content-Type": "application/scim+json",
-            "X-API-Key": os.getenv("PRST_API_KEY"),
-        }
+        headers={"Content-Type": "application/scim+json", "X-API-Key": PRST_API_KEY}
     ) as client:
         resp = client.patch(url, json=payload)
         resp.raise_for_status()
@@ -130,7 +129,7 @@ def prst_yield_groups() -> typing.Iterator[list]:
     page_size = 100
     url = "https://public-api.process.st/api/scim/Groups"
     params = {"count": page_size, "startIndex": 1}
-    with httpx.Client(headers={"X-API-Key": os.getenv("PRST_API_KEY")}) as client:
+    with httpx.Client(headers={"X-API-Key": PRST_API_KEY}) as client:
         has_more = True
         while has_more:
             resp = client.get(url, params=params)
@@ -151,7 +150,7 @@ def prst_yield_users() -> typing.Iterable[list]:
     page_size = 100
     url = "https://public-api.process.st/api/scim/Users"
     params = {"count": page_size, "startIndex": 1}
-    with httpx.Client(headers={"X-Api-Key": os.getenv("PRST_API_KEY")}) as client:
+    with httpx.Client(headers={"X-Api-Key": PRST_API_KEY}) as client:
         has_more = True
         while has_more:
             resp = client.get(url, params=params)
@@ -217,7 +216,7 @@ def main() -> None:
         main_job()
 
 
-def handle_sigterm(_signal: int, _frame: types.FrameType) -> None:
+def handle_sigterm(_signal: int, _frame: types.FrameType | None) -> None:
     sys.exit()
 
 

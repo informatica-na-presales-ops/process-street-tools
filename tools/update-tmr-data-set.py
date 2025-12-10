@@ -14,7 +14,7 @@ import psycopg2.extras
 
 log = logging.getLogger(__name__)
 
-PRST_DATA_SET_WEBHOOK = os.getenv("PRST_DATA_SET_WEBHOOK")
+PRST_DATA_SET_WEBHOOK = os.getenv("PRST_DATA_SET_WEBHOOK", "")
 
 
 def get_pg_connection() -> psycopg2._psycopg.connection:
@@ -111,7 +111,7 @@ def main() -> None:
         main_job()
 
 
-def handle_sigterm(_signal: int, _frame: types.FrameType) -> None:
+def handle_sigterm(_signal: int, _frame: types.FrameType | None) -> None:
     sys.exit()
 
 
