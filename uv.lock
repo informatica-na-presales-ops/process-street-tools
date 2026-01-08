@@ -38,11 +38,11 @@ wheels = [
 
 [[package]]
 name = "datime"
-version = "2025.0"
+version = "2026.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c4/c2/859f930489dd43e72fb7174b0e6213c769b32739b5b5a7173cf669eb1c3d/datime-2025.0.tar.gz", hash = "sha256:2f43bb3245083223c203660bb6dc51894e2ffe75e7c5dfa32592c5d5c3d689e3", size = 2505, upload-time = "2025-04-28T18:10:06.467Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0f/ca/5b49918c912953da6964352c6b797a74a1fbfb0ce91dcca400dc8ead888b/datime-2026.0.tar.gz", hash = "sha256:797c7fc54627f9087e5af3748d6952bb0122faa97d6c005d020d605764daa452", size = 1318, upload-time = "2026-01-07T20:50:30.788Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/93/b6fe150918ec307fed0a0d2a53f5701efc377d630a4f1da15c3d6a5dc45d/datime-2025.0-py3-none-any.whl", hash = "sha256:66d90e6532a0407a7aecc6cfe025dd47a7f5a8e018eb2b786d70bc785e972793", size = 2751, upload-time = "2025-04-28T18:10:05.651Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/ac/5e6bf8cb538a5ca3d08b46c83bd54a6b9a6645ebc4db062b0b14640395a2/datime-2026.0-py3-none-any.whl", hash = "sha256:d1dfc0c39f6d48455bedee4044db1432e21820f7a72902a0a9cad491048bfaf4", size = 1890, upload-time = "2026-01-07T20:50:31.394Z" },
 ]
 
 [[package]]
