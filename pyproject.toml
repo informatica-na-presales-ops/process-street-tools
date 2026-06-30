@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "apscheduler>=3.11.0",
+    "apscheduler>=3.11.3",
     "datime>=2025.0",
     "httpx>=0.28.1",
     "notch>=2025.2",
